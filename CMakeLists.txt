@@ -9,21 +9,18 @@ add_subdirectory("./box2d")
 
 ##############################
 
-#add_library(mm_box2d
-	#./src/mm_box2d/components/box2d_comp.hpp
-	#./src/mm_box2d/components/box2d_comp.cpp
-	#./src/mm_box2d/systems/box2d_system.hpp
-	#./src/mm_box2d/systems/box2d_system.cpp
-#)
+add_library(mm_box2d INTERFACE
+	#./src/mm_box2d/components/world.hpp
+)
 
-#target_include_directories(mm_box2d PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src")
+target_include_directories(mm_box2d INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
-#target_link_libraries(mm_box2d
-	#engine
+target_link_libraries(mm_box2d INTERFACE
+	engine
 	#common_components
 
-	#Box2D
-#)
+	box2d
+)
 
 ###############################
 
@@ -56,21 +53,21 @@ add_subdirectory("./box2d")
 
 ###############################
 
-## Box2D Debug Draw for mm
-#add_library(mm_box2d_debug_draw
-	#./src/mm_box2d/render_tasks/box2d_debug_draw.hpp
-	#./src/mm_box2d/render_tasks/box2d_debug_draw.cpp
+# Box2D Debug Draw for mm
+add_library(mm_box2d_debug_draw
+	./src/mm_box2d/opengl/render_tasks/box2d_debug_draw.hpp
+	./src/mm_box2d/opengl/render_tasks/box2d_debug_draw.cpp
 
-	#./src/mm_box2d/render_tasks/DebugDraw.h
-	#./src/mm_box2d/render_tasks/DebugDraw.cpp
-#)
+	./src/mm_box2d/opengl/render_tasks/draw.h
+	./src/mm_box2d/opengl/render_tasks/draw.cpp
+)
 
-#target_include_directories(mm_box2d_debug_draw PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src")
+target_include_directories(mm_box2d_debug_draw PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
-#target_link_libraries(mm_box2d_debug_draw
-	#mm_box2d
-	#opengl_renderer_s
-#)
+target_link_libraries(mm_box2d_debug_draw
+	mm_box2d
+	opengl_renderer_s
+)
 
 #if(EMSCRIPTEN)
 	#set_target_properties(mm_box2d_debug_draw PROPERTIES COMPILE_FLAGS "-s USE_SDL=2")
