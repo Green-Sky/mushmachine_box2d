@@ -383,6 +383,8 @@ struct GLRenderLines
 		glBindBuffer(GL_ARRAY_BUFFER, m_vboIds[1]);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, m_count * sizeof(b2Color), m_colors);
 
+		glLineWidth(1.0f);
+
 		glDrawArrays(GL_LINES, 0, m_count);
 
 		sCheckGLError();
