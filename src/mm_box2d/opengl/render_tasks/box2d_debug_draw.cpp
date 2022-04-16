@@ -11,17 +11,26 @@ namespace MM::Box2D::OpenGL::RenderTasks {
 using namespace MM::OpenGL;
 
 void DebugDraw::render(Services::OpenGLRenderer& rs, Engine& engine) {
-	MM::Scene& scene = engine.getService<MM::Services::SceneServiceInterface>().getScene();
-	auto* world_ctx = scene.try_ctx<MM::Box2D::Components::World>();
-
-	// if no b2World in scene, skip rendering
-	if (!world_ctx) {
-		return;
+	auto* ssi = engine.tryService<MM::Services::SceneServiceInterface>();
+	if (ssi == nullptr) {
+		return; // nothing to draw
 	}
 
-	auto* debug_draw_context = scene.try_ctx<DebugDrawContext>();
-	if (!debug_draw_context) {
-		debug_draw_context = &_default_context;
+	auto& scene = ssi->getScene();
+
+	if (!scene.ctx().contains<Camera3D>()) {
+		return; // nothing to draw
+	}
+
+	if (!scene.ctx().contains<MM::Box2D::Components::World>()) {
+		return; // nothing to draw
+	}
+
+	auto& world_ctx = scene.ctx().at<MM::Box2D::Components::World>();
+
+	DebugDrawContext* debug_draw_context = &_default_context;
+	if (scene.ctx().contains<DebugDrawContext>()) {
+		debug_draw_context = &scene.ctx().at<DebugDrawContext>();
 	}
 
 	if (!debug_draw_context->enable) {
@@ -41,9 +50,9 @@ void DebugDraw::render(Services::OpenGLRenderer& rs, Engine& engine) {
 
 	_debug_draw.SetFlags(flags);
 
-	_debug_draw.SetCamera(scene.ctx<MM::OpenGL::Camera3D>());
-	world_ctx->world.SetDebugDraw(&_debug_draw);
-	world_ctx->world.DebugDraw();
+	_debug_draw.SetCamera(scene.ctx().at<MM::OpenGL::Camera3D>());
+	world_ctx.world.SetDebugDraw(&_debug_draw);
+	world_ctx.world.DebugDraw();
 	_debug_draw.Flush();
 }
 
