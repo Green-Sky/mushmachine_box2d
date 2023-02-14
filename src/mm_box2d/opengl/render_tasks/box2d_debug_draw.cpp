@@ -26,11 +26,11 @@ void DebugDraw::render(Services::OpenGLRenderer& rs, Engine& engine) {
 		return; // nothing to draw
 	}
 
-	auto& world_ctx = scene.ctx().at<MM::Box2D::Components::World>();
+	auto& world_ctx = scene.ctx().get<MM::Box2D::Components::World>();
 
 	DebugDrawContext* debug_draw_context = &_default_context;
 	if (scene.ctx().contains<DebugDrawContext>()) {
-		debug_draw_context = &scene.ctx().at<DebugDrawContext>();
+		debug_draw_context = &scene.ctx().get<DebugDrawContext>();
 	}
 
 	if (!debug_draw_context->enable) {
@@ -50,7 +50,7 @@ void DebugDraw::render(Services::OpenGLRenderer& rs, Engine& engine) {
 
 	_debug_draw.SetFlags(flags);
 
-	_debug_draw.SetCamera(scene.ctx().at<MM::OpenGL::Camera3D>());
+	_debug_draw.SetCamera(scene.ctx().get<MM::OpenGL::Camera3D>());
 	world_ctx.world.SetDebugDraw(&_debug_draw);
 	world_ctx.world.DebugDraw();
 	_debug_draw.Flush();
