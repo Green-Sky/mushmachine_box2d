@@ -2,7 +2,7 @@
 
 // Copyright (c) 2019 Erin Catto
 
-// Modified by Green-Sky 2019, 2021
+// Modified by Green-Sky 2019, 2021, 2022
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "draw.h"
+#include "./draw.h"
 
 #ifdef MM_OPENGL_3_GLES
 	#include <GLES3/gl3.h>
@@ -105,7 +105,6 @@ static GLuint sCreateShaderProgram(const char* vs, const char* fs)
 	GLuint programId = glCreateProgram();
 	glAttachShader(programId, vsId);
 	glAttachShader(programId, fsId);
-	glBindFragDataLocation(programId, 0, "color");
 	glLinkProgram(programId);
 
 	glDeleteShader(vsId);
@@ -149,10 +148,9 @@ struct GLRenderPoints
 			"	precision mediump float;\n"
 			"#endif\n"
 			"in vec4 f_color;\n"
-			"out vec4 color;\n"
 			"void main(void)\n"
 			"{\n"
-			"	color = f_color;\n"
+			"	gl_FragColor = f_color;\n"
 			"}\n";
 
 		m_programId = sCreateShaderProgram(vs, fs);
@@ -302,10 +300,9 @@ struct GLRenderLines
 			"	precision mediump float;\n"
 			"#endif\n"
 			"in vec4 f_color;\n"
-			"out vec4 color;\n"
 			"void main(void)\n"
 			"{\n"
-			"	color = f_color;\n"
+			"	gl_FragColor = f_color;\n"
 			"}\n";
 
 		m_programId = sCreateShaderProgram(vs, fs);
@@ -439,10 +436,9 @@ struct GLRenderTriangles
 			"	precision mediump float;\n"
 			"#endif\n"
 			"in vec4 f_color;\n"
-			"out vec4 color;\n"
 			"void main(void)\n"
 			"{\n"
-			"	color = f_color;\n"
+			"	gl_FragColor = f_color;\n"
 			"}\n";
 
 		m_programId = sCreateShaderProgram(vs, fs);
